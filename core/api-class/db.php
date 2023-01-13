@@ -6,7 +6,7 @@ class DB {
     const DB_USER = "sngs";
     //const DB_USER = "root";
     //const DB_PASSWORD = "";
-    const DB_PASSWORD = "";
+    const DB_PASSWORD = "adminroot";
     const DB = "bd_fadel"; 
     //const DB = "bd_songo_sgns"; 
 
