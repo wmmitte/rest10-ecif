@@ -177,8 +177,7 @@ function login() {
     /* recuperation des variables */
     $request = \Slim\Slim::getInstance()->request();
     $update = json_decode($request->getBody(), true);
-    var_dump(json_decode($request->getBody(), true));
-
+   
     /* class instance */
     $AuthM = new authentificationModel();
 
