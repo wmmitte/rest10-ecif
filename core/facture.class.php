@@ -14,13 +14,21 @@ class factureModel extends model {
 
     public function getFacturesOf($search) {
         $response = array();
-        $code = $this->esc($search);
-        $_SESSION['userMag'] = $_GET['userMag'];
+        $code = $this->esc($search['search']);
+        $_SESSION['userMag'] = intval($this->esc($search['userMag']));
 
         $dt = "";
 
         $qc = "";
-        if (strtolower($code) == "annulee")
+        $query = "";
+        
+        $condmag = "";
+
+        if ($_SESSION['userMag'] > 0)
+            $condmag = " AND m.id_mag=" . intval($_SESSION['userMag']);
+
+        if($code!=""){
+            if (strtolower($code) == "annulee")
             $qc = " OR f.sup_fact=1";
 
         if (strtolower($code) == "remise")
@@ -29,11 +37,8 @@ class factureModel extends model {
         if (isDate($code))
             $dt = " OR date(f.date_fact)='" . isoToMysqldate($code) . "'";
 
-        $condmag = "";
-        if ($_SESSION['userMag'] > 0)
-            $condmag = " AND m.id_mag=" . intval($_SESSION['userMag']);
 
-        $query = "SELECT f.motif_sup_fact,f.sup_by_fact,f.id_fact,f.sup_fact,f.date_fact,f.date_sup_fact,f.bl_fact_crdt,f.bl_crdt_regle,f.crdt_fact,f.bl_fact_grt,f.remise_vnt_fact,f.som_verse_crdt,f.code_fact,f.bl_fact_crdt,f.bl_bic,f.bl_tva,f.date_fact,
+$query = "SELECT f.motif_sup_fact,f.sup_by_fact,f.id_fact,f.sup_fact,f.date_fact,f.date_sup_fact,f.bl_fact_crdt,f.bl_crdt_regle,f.crdt_fact,f.bl_fact_grt,f.remise_vnt_fact,f.som_verse_crdt,f.code_fact,f.bl_fact_crdt,f.bl_bic,f.bl_tva,f.date_fact,
             c.code_clt,COALESCE(c.nom_clt,'-') as nom_clt,COALESCE(c.exo_tva_clt,0) as exo_tva_clt,
             COALESCE(c.id_clt,0) as id_clt,
             m.nom_mag,m.code_mag,f.code_caissier_fact,f.caissier_fact,u.mag_user
@@ -42,8 +47,23 @@ class factureModel extends model {
                             INNER JOIN t_user u ON f.caissier_fact=u.id_user 
                            LEFT JOIN t_client c ON f.clnt_fact=c.id_clt 
                            INNER JOIN t_magasin m ON f.mag_fact=m.id_mag 
-                           WHERE f.crdt_fact>0 AND (f.code_fact LIKE '%$code%' $qc OR c.nom_clt LIKE '%$code%' $dt) $condmag
+                           WHERE f.crdt_fact>0 AND (f.som_verse_crdt - f.crdt_fact) < 0  AND f.date_fact >= DATE_SUB(now(), INTERVAL 1 MONTH) AND (f.code_fact LIKE '%$code%' $qc OR c.nom_clt LIKE '%$code%' $dt) $condmag
                            ORDER BY f.id_fact DESC";
+        }
+        else {
+$query = "SELECT f.motif_sup_fact,f.sup_by_fact,f.id_fact,f.sup_fact,f.date_fact,f.date_sup_fact,f.bl_fact_crdt,f.bl_crdt_regle,f.crdt_fact,f.bl_fact_grt,f.remise_vnt_fact,f.som_verse_crdt,f.code_fact,f.bl_fact_crdt,f.bl_bic,f.bl_tva,f.date_fact,
+            c.code_clt,COALESCE(c.nom_clt,'-') as nom_clt,COALESCE(c.exo_tva_clt,0) as exo_tva_clt,
+            COALESCE(c.id_clt,0) as id_clt,
+            m.nom_mag,m.code_mag,f.code_caissier_fact,f.caissier_fact,u.mag_user
+                           FROM 
+                           t_facture_vente f
+                            INNER JOIN t_user u ON f.caissier_fact=u.id_user 
+                           LEFT JOIN t_client c ON f.clnt_fact=c.id_clt 
+                           INNER JOIN t_magasin m ON f.mag_fact=m.id_mag 
+                           WHERE f.crdt_fact>0 AND (f.som_verse_crdt - f.crdt_fact) < 0  AND f.date_fact >= DATE_SUB(now(), INTERVAL 1 MONTH) $condmag
+                           ORDER BY f.id_fact DESC";
+        }
+        
 
 
         $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__ . " factures");

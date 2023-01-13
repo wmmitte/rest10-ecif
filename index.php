@@ -395,7 +395,7 @@ function getFactures() {
     $request = \Slim\Slim::getInstance()->request();
     $_PObj = json_decode($request->getBody(), true);
 
-    $search = $_PObj['search'];
+   // $search = $_PObj['search'];
 
 
     /* Variables */
@@ -406,7 +406,7 @@ function getFactures() {
     /* begin */
     try {
 
-        $result = $Model->getFacturesOf($search);
+        $result = $Model->getFacturesOf($_PObj);
 
         $response = array("status" => 0,
             "datas" => $result,
