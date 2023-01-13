@@ -50,14 +50,14 @@ class authentificationModel extends model {
                 $_SESSION['codeMag'] = $result['code_mag'];
                 $_SESSION['nomMag'] = $result['nom_mag'];
                 /* options */
-                /*$_SESSION['tf'] = $result['tva_fact'];
+                $_SESSION['tf'] = $result['tva_fact'];
                 $_SESSION['bf'] = $result['bic_fact'];
                 $_SESSION['pv'] = $result['prix_vari'];
                 $_SESSION['pg'] = $result['prix_gros'];
                 $_SESSION['cat'] = $result['categorie_art'];
                 $_SESSION['apu'] = $result['aff_pu'];
                 /* fusions des droits restrictan */
-               /* if ($result['resa_mag'] == 1)
+                if ($result['resa_mag'] == 1)
                     $result['restrict_annul'] = true;
 
                 $_SESSION['resa'] = $result['restrict_annul'];
@@ -74,15 +74,15 @@ class authentificationModel extends model {
                 $_SESSION['passwordsms'] = $result['pass_sms'];
 
                 /* Validations */
-              /*  $_SESSION['validsortie'] = $result['validsortie'];
+                $_SESSION['validsortie'] = $result['validsortie'];
                 $_SESSION['validappro'] = $result['validappro'];
                 $_SESSION['validfacture'] = $result['validfacture'];
                 
                 /* Caisse tva */
-               /* $_SESSION['cais_tva'] = $result['cais_tva'];
+                $_SESSION['cais_tva'] = $result['cais_tva'];
 
                 /* marges */
-               /* $_SESSION['fmt'] = $result['fmt'];
+                $_SESSION['fmt'] = $result['fmt'];
                 $_SESSION['fmb'] = $result['fmb'];
                 $_SESSION['pmt'] = $result['pmt'];
                 $_SESSION['pmb'] = $result['pmb'];
@@ -90,11 +90,11 @@ class authentificationModel extends model {
                 $_SESSION['rmb'] = $result['rmb'];
 
                 /* delai + mode */
-               /* $_SESSION['ret_pay'] = 15;
+                $_SESSION['ret_pay'] = 15;
                 $_SESSION['mode_fact_uniq'] = $result['mode_fact_uniq'];
                 $_SESSION['mode_clnt_uniq'] = $result['mode_clnt_uniq'];
                 $_SESSION['delai_bons'] = $result['delai_bons'];
-                $_SESSION['delai_bons'] = $result['delai_bons'];*/
+                $_SESSION['delai_bons'] = $result['delai_bons'];
                 $_SESSION['impots_cond'] = 0;
 
                 $response = array("status" => 1,
