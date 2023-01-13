@@ -3,11 +3,11 @@
 class DB {
 
     const DB_SERVER = "127.0.0.1";
-    const DB_USER = "root";
+    const DB_USER = "sngse";
     //const DB_USER = "root";
     //const DB_PASSWORD = "";
     const DB_PASSWORD = "";
-    const DB = "bd_ecif_full"; 
+    const DB = "bd_fadel"; 
     //const DB = "bd_songo_sgns"; 
 
     private $characterSet;
