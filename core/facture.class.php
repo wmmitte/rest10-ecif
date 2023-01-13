@@ -15,6 +15,8 @@ class factureModel extends model {
     public function getFacturesOf($search) {
         $response = array();
         $code = $this->esc($search);
+        $_SESSION['userMag'] = $_GET['userMag'];
+
         $dt = "";
 
         $qc = "";
