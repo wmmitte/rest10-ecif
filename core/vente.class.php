@@ -134,7 +134,8 @@ class venteModel extends model{
                          f.login_caissier_fact,
                          f.code_caissier_fact,
                          f.bl_crdt_regle,f.crdt_fact,f.som_verse_crdt,f.remise_vnt_fact,f.bl_bic,f.bl_tva,
-                         f.bl_fact_crdt,f.bl_fact_grt,f.bl_encaiss_grt
+                         f.bl_fact_crdt,f.bl_fact_grt,f.bl_encaiss_grt,
+                         f.sup_fact
                          FROM t_vente v 
                          INNER JOIN t_article a ON v.article_vnt=a.id_art
                          INNER JOIN t_facture_vente f ON v.facture_vnt=f.id_fact
