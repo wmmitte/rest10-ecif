@@ -168,7 +168,7 @@ class venteModel extends model{
             return $response;
            
         } else { 
-           return null;
+           return array("query" => $query );;
         }
     }
     
