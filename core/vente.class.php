@@ -126,22 +126,27 @@ class venteModel extends model{
         $sliceT = "";
         
        
-        $query = "SELECT a.nom_art,f.code_fact,
+        $query = "SELECT a.nom_art,f.code_fact,f.id_fact,
                          m.nom_mag,m.code_mag,
                          v.id_vnt,v.qte_vnt,v.pu_theo_vnt,v.mnt_theo_vnt,v.date_vnt,v.marge_vnt,
                          COALESCE(c.nom_clt,'-') as clt,
                          time(f.date_fact) as heure_fact,
                          f.login_caissier_fact,
+                         f.reference_paiement,
+                         COALESCE(f.mode_paiement,'-') as mode_paiement,
+                         COALESCE(mp.code_mode,'-') as code_mode,
+                         f.sup_fact,
+                          COALESCE(f.date_sup_fact,'0000-00-00 00:00') as date_sup_fact,
                          f.code_caissier_fact,
                          f.bl_crdt_regle,f.crdt_fact,f.som_verse_crdt,f.remise_vnt_fact,f.bl_bic,f.bl_tva,
-                         f.bl_fact_crdt,f.bl_fact_grt,f.bl_encaiss_grt,
-                         f.sup_fact
+                         f.bl_fact_crdt,f.bl_fact_grt,f.bl_encaiss_grt
                          FROM t_vente v 
                          INNER JOIN t_article a ON v.article_vnt=a.id_art
                          INNER JOIN t_facture_vente f ON v.facture_vnt=f.id_fact
                          INNER JOIN t_magasin m on f.mag_fact=m.id_mag
+                         LEFT JOIN t_mode_paiement mp on f.mode_paiement=mp.id_mode
                          LEFT JOIN t_client c ON f.clnt_fact=c.id_clt 
-                         WHERE DATE(v.date_vnt)='" . date('Y-m-d') . "' ".BTQ_VNT." $condMag $sliceT ORDER BY v.id_vnt DESC limit ". QLM." offset $offset";
+                         WHERE DATE(v.date_enr)='" . date('Y-m-d') . "' OR DATE(v.date_sup_vnt)='" . date('Y-m-d') . "') ".BTQ_VNT." $condMag $sliceT ORDER BY v.id_vnt DESC limit ". QLM." offset $offset";
 
         $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__." vente");
 
