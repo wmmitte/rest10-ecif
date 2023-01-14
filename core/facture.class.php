@@ -83,10 +83,14 @@ $query = "SELECT f.motif_sup_fact,f.sup_by_fact,f.id_fact,f.sup_fact,f.date_fact
     
     
     
-     public function undoFacture($id_fact) {
+     public function undoFacture($data) {
+
+        $_SESSION['userCode'] = $data['id_fact'];
+        $_SESSION['userLogin'] = $data['userLogin'];
+        $_SESSION['userId'] = intval($data['userId']);
         
         //$motif_fact = $fact['motif'];
-        $id_fact = intval($id_fact);
+        $id_fact = intval($data['id_fact']);
 
 
         $r = $this->fctUndoRegClntByFact($id_fact);

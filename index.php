@@ -85,7 +85,7 @@ $app->get('/ventesJourofs/:ofs', 'getVentesJourofs');
 
 
 $app->post('/factures/', 'getFactures');
-$app->get('/facture/undo/:idfact', 'undoFacture');
+$app->post('/facture/undo/', 'undoFacture');
 /*
  * ======= Bons 
  */
@@ -419,10 +419,11 @@ function getFactures() {
     }
 }
 
-function undoFacture($idfact) {
-
+function undoFacture() {
 
     /* Variables */
+$request = \Slim\Slim::getInstance()->request();
+    $_PObj = json_decode($request->getBody(), true);
 
     /* class instance */
     $Model = new factureModel();
@@ -430,7 +431,7 @@ function undoFacture($idfact) {
     /* begin */
     try {
 
-        $result = $Model->undoFacture($idfact);
+        $result = $Model->undoFacture($_PObj);
 
         $response = array("status" => 0,
             "datas" => $result,
