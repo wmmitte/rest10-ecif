@@ -99,7 +99,7 @@ class venteModel extends model{
                          INNER JOIN t_magasin m on f.mag_fact=m.id_mag
                          LEFT JOIN t_mode_paiement mp on f.mode_paiement=mp.id_mode
                          LEFT JOIN t_client c ON f.clnt_fact=c.id_clt 
-                         WHERE DATE(v.date_enr)='" . date('Y-m-d') . "' OR DATE(v.date_sup_vnt)='" . date('Y-m-d') . "') ".BTQ_VNT." $condMag $sliceT ORDER BY v.id_vnt DESC";
+                         WHERE DATE(v.date_enr)='" . date('Y-m-d') . "' OR DATE(v.date_sup_vnt)='" . date('Y-m-d') . "' ".BTQ_VNT." $condMag $sliceT ORDER BY v.id_vnt DESC";
 
         $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__." vente");
 
