@@ -151,11 +151,16 @@ class etatModel extends model {
     }
 
     public function getFactureDetails($paramId) {
-
+       $response = array();
         $id = doubleval($paramId);
 
-        $query = "SELECT a.nom_art,
-                         v.qte_vnt,v.pu_theo_vnt
+        $query = "SELECT a.code_art, 
+        a.nom_art,
+        v.id_vnt,
+        v.qte_vnt,
+        v.pu_theo_vnt,
+        v.mnt_theo_vnt,
+        v.date_vnt
                           FROM t_vente v
                          INNER JOIN t_article a ON v.article_vnt=a.id_art
                           INNER JOIN t_facture_vente f ON v.facture_vnt=f.id_fact
@@ -168,13 +173,15 @@ class etatModel extends model {
             while ($row = $r->fetch_assoc()) {
                 $result[] = $row;
             }
+        $response = $result;
         }
 
-        $item = $this->getFacture($id);
+       // $item = $this->getFacture($id);
+        
 
-        $response = array("factureDetails" => $result,
+       /* $response = array("factureDetails" => $result,
             "facture" => $item
-        );
+        );*/
 
         return $response;
     }
