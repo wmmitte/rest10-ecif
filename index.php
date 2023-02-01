@@ -243,7 +243,7 @@ function getApprovisionnementArticles($id) {
     }
 }
 
-function queryEtatstock($query) {
+function queryEtatstock() {
     $_PObj = json_decode($request->getBody(), true);
 
     /* Variables */
