@@ -244,6 +244,7 @@ function getApprovisionnementArticles($id) {
 }
 
 function queryEtatstock() {
+    $request = \Slim\Slim::getInstance()->request();
     $_PObj = json_decode($request->getBody(), true);
 
     /* Variables */
