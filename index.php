@@ -121,7 +121,6 @@ $app->get('/creancesofs/:ofs', 'getCreancesofs');
 $app->post('/searchcreances/', 'searchCreances');
 $app->get('/getFactureDetails/:id', 'getFactureDetails');
 
-
 /*
  * ======= ETATS DETTES  
  */
@@ -154,7 +153,7 @@ $app->get('/getCategories', 'getCategories');
  */
 $app->get('/etatstockofs/:ofs', 'getEtatstockofs');
 $app->post('/searchetatstock/', 'searchEtatstock');
-$app->get('/queryetatstock/:query', 'queryEtatstock');
+$app->post('/queryetatstock/', 'queryEtatstock');
 $app->get('/approvisionnementArticles/:id', 'getApprovisionnementArticles');
 
 $app->get('/etatalerteofs/:ofs', 'getEtatAlerteofs');
@@ -245,6 +244,7 @@ function getApprovisionnementArticles($id) {
 }
 
 function queryEtatstock($query) {
+    $_PObj = json_decode($request->getBody(), true);
 
     /* Variables */
 
@@ -254,7 +254,7 @@ function queryEtatstock($query) {
     /* begin */
     try {
 
-        $result = $StkM->queryEtatStock($query);
+        $result = $StkM->queryEtatStock($_PObj);
 
         $response = array("status" => 0,
             "datas" => $result,

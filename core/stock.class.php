@@ -161,21 +161,35 @@ from t_stock s
     
     
     
-    public function queryEtatStock($query) {
+    public function queryEtatStock($search) {
+        $response = array();
+        $qry = $this->esc($search['search']);
+        $_SESSION['userMag'] = intval($this->esc($search['userMag']));
+        $query = "";
 
-
-       $qry = $this->esc($query);
-
+         if($qry!=""){
         if ($_SESSION['userMag'] != 0)
-            $query = "SELECT *,p.prix_mini_art,p.prix_gros_art FROM v_etat_stock 
+            $query = "SELECT nom_mag,nom_cat,nom_art,qte_stk,seuil_art,p.prix_mini_art,p.prix_gros_art FROM v_etat_stock 
                 left join (select * from t_prix_article GROUP BY art_prix_art DESC) p on v_etat_stock.art_stk=p.art_prix_art
                 WHERE (nom_art like '%$qry%' OR nom_cat like '%$qry%') AND  mag_stk=" . intval($_SESSION['userMag']);
         else
-            $query = "SELECT *,p.prix_mini_art,p.prix_gros_art FROM v_etat_stock 
+            $query = "SELECT nom_mag,nom_cat,nom_art,qte_stk,seuil_art,p.prix_mini_art,p.prix_gros_art FROM v_etat_stock 
                 left join (select * from t_prix_article GROUP BY art_prix_art DESC) p on v_etat_stock.art_stk=p.art_prix_art
                 WHERE nom_art like '%$qry%' OR nom_cat like '%$qry%' ";
+         }else{
 
+            if ($_SESSION['userMag'] != 0)
+            $query = "SELECT nom_mag,nom_cat,nom_art,qte_stk,seuil_art,p.prix_mini_art,p.prix_gros_art FROM v_etat_stock 
+                left join (select * from t_prix_article GROUP BY art_prix_art DESC) p on v_etat_stock.art_stk=p.art_prix_art
+                WHERE  mag_stk=" . intval($_SESSION['userMag']). " limit 100";
+        else
+            $query = "SELECT nom_mag,nom_cat,nom_art,qte_stk,seuil_art,p.prix_mini_art,p.prix_gros_art FROM v_etat_stock 
+                left join (select * from t_prix_article GROUP BY art_prix_art DESC) p on v_etat_stock.art_stk=p.art_prix_art
+                WHERE 1=1 limit 100 ";
+
+         }
         $query .= " Order by nom_mag,nom_cat,nom_art";
+
 
         $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
 
@@ -186,11 +200,12 @@ from t_stock s
                 $result[] = $row;
             }
 
-            $response = array("stock" => $result
-            );
-
+            $response =  $result;
+            return $response;
+        }else{
             return $response;
         }
+
     }
     
     
