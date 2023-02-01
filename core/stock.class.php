@@ -169,21 +169,21 @@ from t_stock s
 
          if($qry!=""){
         if ($_SESSION['userMag'] != 0)
-            $query = "SELECT nom_mag,nom_cat,nom_art,qte_stk,seuil_art,p.prix_mini_art,p.prix_gros_art FROM v_etat_stock 
+            $query = "SELECT nom_mag,nom_cat,nom_art,qte_stk,p.seuil_art,p.prix_mini_art,p.prix_gros_art FROM v_etat_stock 
                 left join (select * from t_prix_article GROUP BY art_prix_art DESC) p on v_etat_stock.art_stk=p.art_prix_art
                 WHERE (nom_art like '%$qry%' OR nom_cat like '%$qry%') AND  mag_stk=" . intval($_SESSION['userMag']) ." Order by nom_mag,nom_cat,nom_art";
         else
-            $query = "SELECT nom_mag,nom_cat,nom_art,qte_stk,seuil_art,p.prix_mini_art,p.prix_gros_art FROM v_etat_stock 
+            $query = "SELECT nom_mag,nom_cat,nom_art,qte_stk,p.seuil_art,p.prix_mini_art,p.prix_gros_art FROM v_etat_stock 
                 left join (select * from t_prix_article GROUP BY art_prix_art DESC) p on v_etat_stock.art_stk=p.art_prix_art
                 WHERE nom_art like '%$qry%' OR nom_cat like '%$qry%' Order by nom_mag,nom_cat,nom_art ";
          }else{
 
             if ($_SESSION['userMag'] != 0)
-            $query = "SELECT nom_mag,nom_cat,nom_art,qte_stk,seuil_art,p.prix_mini_art,p.prix_gros_art FROM v_etat_stock 
+            $query = "SELECT nom_mag,nom_cat,nom_art,qte_stk,p.seuil_art,p.prix_mini_art,p.prix_gros_art FROM v_etat_stock 
                 left join (select * from t_prix_article GROUP BY art_prix_art DESC) p on v_etat_stock.art_stk=p.art_prix_art
                 WHERE  mag_stk=" . intval($_SESSION['userMag']). " Order by nom_mag,nom_cat,nom_art limit 100 ";
         else
-            $query = "SELECT nom_mag,nom_cat,nom_art,qte_stk,seuil_art,p.prix_mini_art,p.prix_gros_art FROM v_etat_stock 
+            $query = "SELECT nom_mag,nom_cat,nom_art,qte_stk,p.seuil_art,p.prix_mini_art,p.prix_gros_art FROM v_etat_stock 
                 left join (select * from t_prix_article GROUP BY art_prix_art DESC) p on v_etat_stock.art_stk=p.art_prix_art
                 WHERE 1=1 Order by nom_mag,nom_cat,nom_art limit 100 ";
 
