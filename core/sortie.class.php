@@ -607,11 +607,4 @@ class sortieModel extends model {
     }
 
 }
-
-session_name('SessSngS');
-session_start();
-if (isset($_SESSION['userId'])) {
-    $sort = new sortieController;
-    $sort->processApp();
-}
 ?>
