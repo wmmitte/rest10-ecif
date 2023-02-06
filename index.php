@@ -156,6 +156,9 @@ $app->post('/searchetatstock/', 'searchEtatstock');
 $app->post('/queryetatstock/', 'queryEtatstock');
 $app->get('/approvisionnementArticles/:id', 'getApprovisionnementArticles');
 
+// Sortie de stock
+$app->post('/queryetatsortie/', 'queryEtatSortie');
+
 $app->get('/etatalerteofs/:ofs', 'getEtatAlerteofs');
 
 
@@ -256,6 +259,31 @@ function queryEtatstock() {
     try {
 
         $result = $StkM->queryEtatStock($_PObj);
+
+        $response = array("status" => 0,
+            "datas" => $result,
+            "msg" => "");
+        echo json_encode($response);
+    } catch (Exception $e) {
+        $response = array("status" => 0,
+            "error" => $e->getMessage());
+        echo json_encode($response);
+    }
+}
+
+function queryEtatSortie() {
+    $request = \Slim\Slim::getInstance()->request();
+    $_PObj = json_decode($request->getBody(), true);
+
+    /* Variables */
+
+    /* class instance */
+    $StkM = new sortieModel();
+
+    /* begin */
+    try {
+
+        $result = $StkM->getaSorties($_PObj);
 
         $response = array("status" => 0,
             "datas" => $result,
