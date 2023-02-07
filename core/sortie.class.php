@@ -232,9 +232,9 @@ class sortieModel extends model {
         $response = array();
        // $qry = $this->esc($search['search']);
         $_SESSION['userMag'] = intval($this->esc($search['userMag']));
-        $_SESSION['userLogin'] = intval($this->esc($search['userLogin']));
+        $_SESSION['userLogin'] = $this->esc($search['userLogin']);
         $_SESSION['userId'] = intval($this->esc($search['userId']));
-        $_SESSION['userCode'] = intval($this->esc($search['userCode']));
+        $_SESSION['userCode'] = $this->esc($search['userCode']);
 
         $_mag_dst = intval($this->esc($search['destMag']));
         $query = "";  
