@@ -20,9 +20,9 @@ class magasinModel extends model {
 
          if($qry!=""){
         if ($_SESSION['userMag'] == 0)
-            $query = "SELECT m.id_mag, m.code_mag, m.nom_mag  FROM t_magasin m where actifmag=1 AND m.nom_mag like '%".$query."%' order by m.nom_mag";
+            $query = "SELECT m.id_mag, m.code_mag, m.nom_mag  FROM t_magasin m where actifmag=1 AND m.nom_mag like '%".$qry."%' order by m.nom_mag";
         else
-            $query = "SELECT m.id_mag, m.code_mag, m.nom_mag  FROM t_magasin m WHERE  m.nom_mag like '%".$query."%' AND actifmag=1 AND id_mag!=" . intval($_SESSION['userMag']) . "  order by m.nom_mag";
+            $query = "SELECT m.id_mag, m.code_mag, m.nom_mag  FROM t_magasin m WHERE  m.nom_mag like '%".$qry."%' AND actifmag=1 AND id_mag!=" . intval($_SESSION['userMag']) . "  order by m.nom_mag";
          }else{
             if ($_SESSION['userMag'] == 0)
             $query = "SELECT m.id_mag, m.code_mag, m.nom_mag  FROM t_magasin m where actifmag=1 order by m.nom_mag";
