@@ -227,6 +227,55 @@ class sortieModel extends model {
             return $response;
         }
     }
+
+    public function insertSortie($search) {
+        $response = array();
+       // $qry = $this->esc($search['search']);
+        $_SESSION['userMag'] = intval($this->esc($search['userMag']));
+        $_SESSION['userLogin'] = intval($this->esc($search['userLogin']));
+        $_SESSION['userId'] = intval($this->esc($search['userId']));
+        $_SESSION['userCode'] = intval($this->esc($search['userCode']));
+
+        $_mag_dst = intval($this->esc($search['destMag']));
+        $query = "";  
+         
+        $query = "INSERT INTO  t_sortie (
+        mag_sort_dst,
+        bon_sort,
+        mag_sort_src,
+        date_sort,
+        login_sort,
+        user_sort,
+        code_user_sort) 
+        VALUES(" . $_mag_dst . ",now()+0," . $_SESSION['userMag'] . ",now(),'" . $_SESSION['userLogin'] . "'," . $_SESSION['userId'] . ",'" . $_SESSION['userCode'] . "')";
+
+         
+            if (!$r = $this->mysqli->query($query))
+                throw new Exception($this->mysqli->error . __LINE__);
+
+            $BonID = $this->mysqli->insert_id;
+
+            $query = " select m.curent_bs,m.id_mag from t_sortie s
+                inner join t_magasin m on s.mag_sort_dst=m.id_mag WHERE s.id_sort =$BonID limit 1";
+            $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
+
+            $result = $r->fetch_assoc();
+            $curent = $result['curent_bs'];
+            $mg = $result['id_mag'];
+            $next = $curent + 1;
+
+            $query = "UPDATE t_sortie SET 
+                bon_sort=CONCAT('BS',mag_sort_src,mag_sort_dst,DATE_FORMAT(date_sort,'%m'),YEAR(date_sort),$next) WHERE id_sort =$BonID";
+            $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
+
+            $query = "UPDATE t_magasin SET curent_bs=$next WHERE id_mag =$mg";
+            $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
+
+            $response =   $sortie ;
+
+        return $response;
+         
+    }
     
     
     public function getArticleSorties() {
@@ -371,63 +420,7 @@ class sortieModel extends model {
         $this->response('', 204);
     }
 
-    public function insertSortie() {
-        if ($this->get_request_method() != "POST") {
-            $this->response('', 406);
-        }
-
-        $sortie = $_POST;
-        $this->isExistBs($sortie['bon_sort']);
-
-
-        $column_names = array('bon_sort', 'mag_sort_dst');
-
-
-        $keys = array_keys($sortie);
-        $columns = '';
-        $values = '';
-        foreach ($column_names as $desired_key) {
-            if (!in_array($desired_key, $keys)) {
-                $$desired_key = '';
-            } else {
-                if ($desired_key == "mag_sort_dst")
-                    $$desired_key = intval($sortie[$desired_key]);
-                else
-                    $$desired_key = $this->esc($sortie[$desired_key]);
-            }
-            $columns = $columns . $desired_key . ',';
-            if ($desired_key == "mag_sort_dst")
-                $values = $values . "" . $$desired_key . ",";
-            else
-                $values = $values . "'" . $$desired_key . "',";
-        }
-
-        $date_s = $this->esc($sortie['date_sort']);
-
-        $response = array();
-        $query = "INSERT INTO  t_sortie (" . trim($columns, ',') . ",mag_sort_src,date_sort,login_sort,user_sort,code_user_sort) VALUES(" . trim($values, ',') . "," . $_SESSION['userMag'] . ",'" . isoToMysqldate($date_s) . "','" . $_SESSION['userLogin'] . "'," . $_SESSION['userId'] . ",'" . $_SESSION['userCode'] . "')";
-        if (!empty($sortie)) {
-            try {
-                if (!$r = $this->mysqli->query($query))
-                    throw new Exception($this->mysqli->error . __LINE__);
-
-
-                $response = array("status" => 0,
-                    "datas" => $sortie,
-                    "msg" => "sortie  cree avec success!");
-
-                $this->response($this->json($response), 200);
-            } catch (Exception $exc) {
-                $response = array("status" => 1,
-                    "datas" => "",
-                    "msg" => $exc->getMessage());
-
-                $this->response($this->json($response), 200);
-            }
-        }
-        else
-            $this->response('', 204);
-    }
+    
 
     public function updateSortie() {
         if ($this->get_request_method() != "POST") {

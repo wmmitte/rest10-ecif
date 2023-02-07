@@ -158,6 +158,7 @@ $app->get('/approvisionnementArticles/:id', 'getApprovisionnementArticles');
 
 // Sortie de stock
 $app->post('/queryetatsortie/', 'queryEtatSortie');
+$app->post('/insertsortie/', 'insertSortie');
 
 // Magasins
 $app->post('/queryexceptedmagasins/', 'queryExceptedMagasins');
@@ -298,6 +299,32 @@ function queryEtatSortie() {
         echo json_encode($response);
     }
 }
+
+function insertSortie() {
+    $request = \Slim\Slim::getInstance()->request();
+    $_PObj = json_decode($request->getBody(), true);
+
+    /* Variables */
+
+    /* class instance */
+    $StkM = new sortieModel();
+
+    /* begin */
+    try {
+
+        $result = $StkM->insertSortie($_PObj);
+
+        $response = array("status" => 0,
+            "datas" => $result,
+            "msg" => "");
+        echo json_encode($response);
+    } catch (Exception $e) {
+        $response = array("status" => 1,
+            "error" => $e->getMessage());
+        echo json_encode($response);
+    }
+}
+
 function queryExceptedMagasins() {
     $request = \Slim\Slim::getInstance()->request();
     $_PObj = json_decode($request->getBody(), true);
