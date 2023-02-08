@@ -284,7 +284,7 @@ class sortieModel extends model {
             inner join t_article a on a.id_art=asort.art_sort_art
             inner join t_sortie sor on sor.id_sort=asort.sort_sort_art
             WHERE sor.id_sort=$id
-                order by asort.date_sort DESC";
+                order by sort.date_sort DESC";
 
 
         $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
