@@ -44,6 +44,38 @@ class articleModel extends model {
             return $response;
         }
     }
+
+     public function getExtArticlesOfCategorie($search)
+    {
+        $response = array();
+        $_SESSION['userMag'] = intval($this->esc($search['userMag']));
+        $id_cat = intval($this->esc($search['id_cat']));
+        $id_mag = intval($_SESSION['userMag']);
+        $query = ""; 
+
+        $query = "select a.id_art,a.code_art,a.nom_art
+		from t_stock s 
+		inner join t_article a on s.art_stk=a.id_art
+		inner join t_categorie_article c ON a.cat_art=c.id_cat
+		where s.qte_stk>0 
+		and c.id_cat=$id_cat
+		and s.mag_stk=$id_mag"; 
+
+            $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
+
+            if ($r->num_rows > 0) {
+            $result = array();
+            while ($row = $r->fetch_assoc()) {
+                $result[] = $row;
+            }
+
+            $response =  $result;
+            return $response;
+        }else{
+            return $response;
+        }
+    }
+  
     
 
     public function getArticle() {

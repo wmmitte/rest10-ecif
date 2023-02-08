@@ -162,6 +162,7 @@ $app->post('/insertsortie/', 'insertSortie');
 
 // Articles
 $app->post('/queryextcategoriesofmag/', 'getExtCategoriesOfMag');
+$app->post('/queryextarticlesofcategorie/', 'getExtArticlesOfCategorie');
 
 // Magasins
 $app->post('/queryexceptedmagasins/', 'queryExceptedMagasins');
@@ -341,6 +342,31 @@ function getExtCategoriesOfMag() {
     try {
 
         $result = $StkM->getExtCategoriesOfMag($_PObj);
+
+        $response = array("status" => 0,
+            "datas" => $result,
+            "msg" => "");
+        echo json_encode($response);
+    } catch (Exception $e) {
+        $response = array("status" => 1,
+            "error" => $e->getMessage());
+        echo json_encode($response);
+    }
+}
+
+function getExtArticlesOfCategorie() {
+    $request = \Slim\Slim::getInstance()->request();
+    $_PObj = json_decode($request->getBody(), true);
+
+    /* Variables */
+
+    /* class instance */
+    $StkM = new articleModel();
+
+    /* begin */
+    try {
+
+        $result = $StkM->getExtArticlesOfCategorie($_PObj);
 
         $response = array("status" => 0,
             "datas" => $result,
