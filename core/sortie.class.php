@@ -274,18 +274,19 @@ class sortieModel extends model {
    
     
     public function getArticleSorties() {
-        if ($this->get_request_method() != "GET") {
-            $this->response('', 406);
-        }
-         $id = (int) $_GET['id'];
-        $query = "SELECT asort.id_sort_art,asort.qte_sort_art,asort.code_user_sort_art,
-           a.nom_art,a.id_art  
+        $response = array();
+         $id = intval($this->esc($search['id_bon']));
+        $query = "";
+
+         $query = "SELECT a.id_art,a.code_art, asort.qte_sort_art as qte_stk,
+           a.nom_art  
             FROM t_sortie_article asort 
             inner join t_article a on a.id_art=asort.art_sort_art
             inner join t_sortie sor on sor.id_sort=asort.sort_sort_art
             WHERE sor.id_sort=$id
                 order by asort.id_sort_art DESC";
-       
+
+
         $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
 
         if ($r->num_rows > 0) {
@@ -293,17 +294,12 @@ class sortieModel extends model {
             while ($row = $r->fetch_assoc()) {
                 $result[] = $row;
             }
-            $response = array("status" => 0,
-                "datas" => $result,
-                "msg" => "");
-            $this->response($this->json($response), 200);
-        } else {
-            $response = array("status" => 0,
-                "datas" => "",
-                "msg" => "");
-            $this->response($this->json($response), 200);
+
+            $response =  $result;
+            return $response;
+        }else{
+            return $response;
         }
-        $this->response('', 204);
     }
     
 
