@@ -273,7 +273,7 @@ class sortieModel extends model {
 
    
     
-    public function getArticleSorties() {
+    public function getArticleSorties($search) {
         $response = array();
          $id = intval($this->esc($search['id_bon']));
         $query = "";
