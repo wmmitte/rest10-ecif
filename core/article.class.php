@@ -2,7 +2,7 @@
 require_once ("api-class/model.php");
 require_once ("api-class/helpers.php");
 
-class sortieModel extends model {
+class articleModel extends model {
 
     public $data = "";
 
