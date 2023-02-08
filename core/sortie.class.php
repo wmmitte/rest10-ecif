@@ -194,8 +194,7 @@ class sortieModel extends model {
 
     public function getaSorties($search) {
          $response = array();
-       // $qry = $this->esc($search['search']);
-        $_SESSION['userMag'] = intval($this->esc($search['userMag']));
+         $_SESSION['userMag'] = intval($this->esc($search['userMag']));
         $query = "";
 
          if ($_SESSION['userMag'] != 0)
@@ -276,7 +275,8 @@ class sortieModel extends model {
         return $response;
          
     }
-    
+
+   
     
     public function getArticleSorties() {
         if ($this->get_request_method() != "GET") {

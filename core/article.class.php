@@ -1,8 +1,8 @@
 <?php
-
 require_once ("api-class/model.php");
+require_once ("api-class/helpers.php");
 
-class articleController extends model {
+class sortieModel extends model {
 
     public $data = "";
 
@@ -11,6 +11,40 @@ class articleController extends model {
     }
 
    
+
+     public function getExtCategoriesOfMag($search)
+    {
+        $response = array();
+         $_SESSION['userMag'] = intval($this->esc($search['userMag']));
+        $query = "";
+
+            $id_mag = intval($_SESSION['userMag']);
+
+            $condmag = "";
+            if ($id_mag > 0)
+                $condmag = " AND s.mag_stk=$id_mag";
+
+            $query = "select DISTINCT cat.id_cat,cat.nom_cat,cat.code_cat from t_categorie_article cat
+		inner join t_article a on a.cat_art=cat.id_cat
+                inner join t_stock s on a.id_art=s.art_stk AND s.qte_stk > 0 $condmag GROUP BY s.art_stk ORDER BY cat.nom_cat";
+
+
+
+            $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
+
+            if ($r->num_rows > 0) {
+            $result = array();
+            while ($row = $r->fetch_assoc()) {
+                $result[] = $row;
+            }
+
+            $response =  $result;
+            return $response;
+        }else{
+            return $response;
+        }
+    }
+    
 
     public function getArticle() {
         if ($this->get_request_method() != "GET") {
@@ -418,12 +452,5 @@ class articleController extends model {
 
 
 }
- 
-
- session_name('SessSngS');
-session_start(); 
-if(isset($_SESSION['userId'])){
-$app = new articleController;
-$app->processApp();
-}
+  
 ?>
