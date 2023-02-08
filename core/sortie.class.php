@@ -152,25 +152,25 @@ class sortieModel extends model {
     }
 
     public function getSorties() {
-        if ($this->get_request_method() != "GET") {
-            $this->response('', 406);
-        }
-        
-        if ($_SESSION['userMag'] > 0) 
-        $query = "SELECT sort.id_sort,sort.bon_sort,sort.actif,
-           sort.date_sort,sort.login_sort,m.nom_mag  
+        $response = array();
+         $_SESSION['userMag'] = intval($this->esc($search['userMag']));
+        $query = "";
+
+         if ($_SESSION['userMag'] > 0)
+            $query = "SELECT sort.id_sort,sort.vu,sort.bon_sort,sort.actif,sort.bon_vu,
+           sort.date_sort,sort.is_valide,sort.mag_sort_dst as id_mag,sort.login_sort,m.nom_mag  
             FROM t_sortie sort 
             inner join t_magasin m on m.id_mag=mag_sort_dst  
             WHERE sort.actif=1 
             AND sort.user_sort in (SELECT id_user from t_user where mag_user=" . $_SESSION['userMag'] . ")
                 order by sort.id_sort DESC";
-        
         else
-             $query = "SELECT sort.id_sort,sort.bon_sort,sort.actif,
-           sort.date_sort,sort.login_sort,m.nom_mag  
+            $query = "SELECT sort.id_sort,sort.vu,sort.bon_sort,sort.actif,sort.bon_vu,
+           sort.date_sort,sort.is_valide,sort.mag_sort_dst as id_mag,sort.login_sort,m.nom_mag  
             FROM t_sortie sort 
             inner join t_magasin m on m.id_mag=mag_sort_dst  
             WHERE sort.actif=1 Order by sort.id_sort DESC";
+
 
         $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
 
@@ -179,17 +179,12 @@ class sortieModel extends model {
             while ($row = $r->fetch_assoc()) {
                 $result[] = $row;
             }
-            $response = array("status" => 0,
-                "datas" => $result,
-                "msg" => "");
-            $this->response($this->json($response), 200);
-        } else {
-            $response = array("status" => 0,
-                "datas" => "",
-                "msg" => "");
-            $this->response($this->json($response), 200);
+
+            $response =  $result;
+            return $response;
+        }else{
+            return $response;
         }
-        $this->response('', 204);
     }
 
     public function getaSorties($search) {

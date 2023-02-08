@@ -53,7 +53,7 @@ class articleModel extends model {
         $id_mag = intval($_SESSION['userMag']);
         $query = ""; 
 
-        $query = "select a.id_art,a.code_art,a.nom_art
+        $query = "select a.id_art,a.code_art,a.nom_art,s.qte_stk
 		from t_stock s 
 		inner join t_article a on s.art_stk=a.id_art
 		inner join t_categorie_article c ON a.cat_art=c.id_cat
