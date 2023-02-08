@@ -151,7 +151,7 @@ class sortieModel extends model {
         }
     }
 
-    public function getSorties() {
+    public function getSorties($search) {
         $response = array();
          $_SESSION['userMag'] = intval($this->esc($search['userMag']));
         $query = "";
