@@ -278,11 +278,12 @@ class sortieModel extends model {
          $id = intval($this->esc($search['id_bon']));
         $query = "";
 
-         $query = "SELECT sor.id_sort,CONCAT(sor.bon_sort,' du ',DATE_FORMAT(sor.date_sort,'%d/%m/%Y'),'') as bon_sort,DATE_FORMAT(asort.date_enr,'%d/%m/%Y %T') as date_sort,a.id_art,a.code_art, asort.qte_sort_art as qte_stk,
+         $query = "SELECT sor.id_sort,CONCAT(sor.bon_sort,' du ',DATE_FORMAT(sor.date_sort,'%d/%m/%Y'),' --> ',m.nom_mag) as bon_sort,DATE_FORMAT(asort.date_enr,'%d/%m/%Y %T') as date_sort,a.id_art,a.code_art, asort.qte_sort_art as qte_stk,
            a.nom_art  
             FROM t_sortie_article asort 
             inner join t_article a on a.id_art=asort.art_sort_art
             inner join t_sortie sor on sor.id_sort=asort.sort_sort_art
+            inner join t_magasin m on sor.mag_sort_dst=m.id_mag
             WHERE sor.id_sort=$id
                 order by asort.date_enr DESC";
 
