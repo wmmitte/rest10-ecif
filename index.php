@@ -162,6 +162,7 @@ $app->post('/querysorties/', 'querySorties');
 $app->post('/queryarticlesorties/', 'queryArticleSorties');
 $app->post('/insertsortie/', 'insertSortie');
 $app->post('/insertstocksortie/', 'insertStockSortie');
+$app->post('/validesortie/', 'valideSortie');
 
 // Articles
 $app->post('/queryextcategoriesofmag/', 'getExtCategoriesOfMag');
@@ -396,6 +397,31 @@ function insertStockSortie() {
     try {
 
         $result = $StkM->insertStockSort($_PObj);
+
+        $response = array("status" => 0,
+            "datas" => $result,
+            "msg" => "");
+        echo json_encode($response);
+    } catch (Exception $e) {
+        $response = array("status" => 1,
+            "error" => $e->getMessage());
+        echo json_encode($response);
+    }
+}
+
+function valideSortie() {
+    $request = \Slim\Slim::getInstance()->request();
+    $_PObj = json_decode($request->getBody(), true);
+
+    /* Variables */
+
+    /* class instance */
+    $StkM = new sortieModel();
+
+    /* begin */
+    try {
+
+        $result = $StkM->valideSort($_PObj);
 
         $response = array("status" => 0,
             "datas" => $result,
