@@ -494,62 +494,41 @@ class sortieModel extends model {
             $this->response('', 204);
     }
 
-    public function insertStockSort() {
-        if ($this->get_request_method() != "POST") {
-            $this->response('', 406);
-        }
-
-        $sortstock = $_POST;
-
-
-        $column_names = array('sort_sort_art', 'art_sort_art', 'qte_sort_art');
-
-        $keys = array_keys($sortstock);
-        $columns = '';
-        $values = '';
-        foreach ($column_names as $desired_key) {
-            if (!in_array($desired_key, $keys)) {
-                $$desired_key = '';
-            } else {
-                $$desired_key = intval($sortstock[$desired_key]);
-            }
-            $columns = $columns . $desired_key . ',';
-            $values = $values . "" . $$desired_key . ",";
-        }
-
-
-
+    public function insertStockSort($search) {
         $response = array();
-        $query = "INSERT INTO  t_sortie_article (" . trim($columns, ',') . ",login_sort_art,user_sort_art,code_user_sort_art) VALUES(" . trim($values, ',') . ",'" . $_SESSION['userLogin'] . "'," . $_SESSION['userId'] . ",'" . $_SESSION['userCode'] . "')";
+        $_SESSION['userMag'] = intval($this->esc($search['userMag']));
+        $_SESSION['userLogin'] = $this->esc($search['userLogin']);
+        $_SESSION['userId'] = intval($this->esc($search['userId']));
+        $_SESSION['userCode'] = $this->esc($search['userCode']);
+        $id_sortie = intval($this->esc($search['sort_sort_art']));
+        $article = intval($this->esc($search['art_id']));
+        $qte_sort = intval($this->esc($search['qte_sort']));
 
-        if (!empty($sortstock)) {
-            try {
-                if (!$r = $this->mysqli->query($query))
-                    throw new Exception($this->mysqli->error . __LINE__);
+        $query = "";
 
-                $idmag = intval($_SESSION['userMag']);
-                $idart = intval($sortstock['art_sort_art']);
-                $qte = intval($sortstock['qte_sort_art']);
+        $querymag = "SELECT mag_sort_src,mag_sort_dst FROM t_sortie WHERE id_sort =$id_sortie ";
+        $rm = $this->mysqli->query($querymag) or die($this->mysqli->error . __LINE__);
+        $resultm = $rm->fetch_assoc();
+        $mag_src_sort_art = $resultm['mag_sort_src'];
+        $mag_dst_sort_art = $resultm['mag_sort_dst'];
 
-                $query = "UPDATE t_stock SET qte_stk=qte_stk - $qte WHERE art_stk =$idart AND mag_stk=$idmag";
-                $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
+         $query = "INSERT INTO  t_sortie_article (sort_sort_art,art_sort_art,qte_sort_art,login_sort_art,user_sort_art,code_user_sort_art,mag_src_sort_art,mag_dst_sort_art) 
+         VALUES(".$id_sortie.",".$article.",".$qte_sort.",'" . $_SESSION['userLogin'] . "'," . $_SESSION['userId'] . ",'" . $_SESSION['userCode'] . "'," . $mag_src_sort_art . "," . $mag_dst_sort_art . ")";
 
 
-                $response = array("status" => 0,
-                    "datas" => $sortstock,
-                    "msg" => "article enregistre dans le bon de sortie avec success!");
+        $r = $this->mysqli->query($query) or die($this->mysqli->error . __LINE__);
 
-                $this->response($this->json($response), 200);
-            } catch (Exception $exc) {
-                $response = array("status" => 1,
-                    "datas" => "",
-                    "msg" => $exc->getMessage());
+        if ($r->num_rows > 0) {
+            $result = array();
+             
+                $result['mag_sort_src'] = $mag_src_sort_art;
+                $result['mag_sort_dst'] = $mag_dst_sort_art;
 
-                $this->response($this->json($response), 200);
-            }
+            $response =  $result;
+            return $response;
+        }else{
+            return $response;
         }
-        else
-            $this->response('', 204);
     }
 
     private function isExistBs($bl) {
