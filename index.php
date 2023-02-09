@@ -162,7 +162,7 @@ $app->post('/querysorties/', 'querySorties');
 $app->post('/queryarticlesorties/', 'queryArticleSorties');
 $app->post('/insertsortie/', 'insertSortie');
 $app->post('/insertstocksortie/', 'insertStockSortie');
-$app->post('/validesortie/', 'valideSortie');
+$app->post('/tooglectif/', 'toogleActif');
 
 // Articles
 $app->post('/queryextcategoriesofmag/', 'getExtCategoriesOfMag');
@@ -409,7 +409,7 @@ function insertStockSortie() {
     }
 }
 
-function valideSortie() {
+function toogleActif() {
     $request = \Slim\Slim::getInstance()->request();
     $_PObj = json_decode($request->getBody(), true);
 
@@ -421,7 +421,7 @@ function valideSortie() {
     /* begin */
     try {
 
-        $result = $StkM->valideSort($_PObj);
+        $result = $StkM->toogleActif($_PObj);
 
         $response = array("status" => 0,
             "datas" => $result,

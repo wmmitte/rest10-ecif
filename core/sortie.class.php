@@ -531,7 +531,7 @@ class sortieModel extends model {
         }
     }
 
-    public function valideSort($search)
+    public function toogleActif($search)
     {   
         $response = array(); 
 
