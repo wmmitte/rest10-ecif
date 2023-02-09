@@ -539,37 +539,12 @@ class sortieModel extends model {
         $status = intval($search['s']);
         $query = "";
 
-        $query = "UPDATE  t_sortie set is_valide=$status WHERE id_sort=$id";
+        $query = "UPDATE  t_sortie set actif=$status WHERE id_sort=$id";
 
-        $response = array();
-       
-            if (!$r = $this->mysqli->query($query))
-                throw new Exception($this->mysqli->error . __LINE__);
-                /** debut mise à jour du stock des articles */
-                $_query_arts = "SELECT asort.art_sort_art, asort.mag_src_sort_art,  asort.mag_dst_sort_art
-            FROM t_sortie_article asort 
-            inner join t_article a on a.id_art=asort.art_sort_art
-            WHERE asort.sort_sort_art=$id
-                order by asort.id_sort_art ASC";
-
-          $r_query_arts = $this->mysqli->query($_query_arts) or die($this->mysqli->error . __LINE__);
-
-        if ($r_query_arts->num_rows > 0) {
-            $result_query_arts = array();
-            while ($row = $r_query_arts->fetch_assoc()) {
-                $_mg_src = $row['mag_src_sort_art'];
-                $_mg_dst = $row['mag_dst_sort_art'];
-                $_art = $row['art_sort_art'];
-
-                $_query_proc_src = "CALL p_update_stock($_art,$_mg_src)";
-                $_query_proc_dst = "CALL p_update_stock($_art,$_mg_dst)";
-                $this->mysqli->query($_query_proc_src) or die($this->mysqli->error . __LINE__);
-                $this->mysqli->query($_query_proc_dst) or die($this->mysqli->error . __LINE__);
-            }
-            
-        } 
-        $response ['res'] = "OK";
+        $this->mysqli->query($query)  or die($this->mysqli->error . __LINE__);
          
+        $response ['res'] = "OK";
+
         return $response;  
          
     }
