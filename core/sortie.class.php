@@ -567,7 +567,10 @@ class sortieModel extends model {
                 $this->mysqli->query($_query_proc_dst) or die($this->mysqli->error . __LINE__);
             }
             
-        }   
+        } 
+        $response ['res'] = "OK";
+         
+        return $response;  
          
     }
 
