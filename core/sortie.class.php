@@ -278,7 +278,7 @@ class sortieModel extends model {
          $id = intval($this->esc($search['id_bon']));
         $query = "";
 
-         $query = "SELECT sor.id_sort,sor.bon_sort,sor.date_sort,a.id_art,a.code_art, asort.qte_sort_art as qte_stk,
+         $query = "SELECT sor.id_sort,sor.bon_sort,DATE_FORMAT(sor.date_sort,'%d/%m/%Y %T') as date_sort,a.id_art,a.code_art, asort.qte_sort_art as qte_stk,
            a.nom_art  
             FROM t_sortie_article asort 
             inner join t_article a on a.id_art=asort.art_sort_art
