@@ -162,7 +162,7 @@ $app->post('/querysorties/', 'querySorties');
 $app->post('/queryarticlesorties/', 'queryArticleSorties');
 $app->post('/insertsortie/', 'insertSortie');
 $app->post('/insertstocksortie/', 'insertStockSortie');
-$app->post('/tooglectif/', 'toogleActif');
+$app->post('/toogleactif/', 'toogleActif');
 
 // Articles
 $app->post('/queryextcategoriesofmag/', 'getExtCategoriesOfMag');
