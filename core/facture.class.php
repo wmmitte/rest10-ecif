@@ -222,6 +222,10 @@ $query = "SELECT f.motif_sup_fact,f.sup_by_fact,f.id_fact,f.sup_fact,f.date_fact
             $qu = "UPDATE t_vente SET sup_vnt=1,date_sup_vnt=now() WHERE id_vnt = $id_vnt";
             $r = $this->mysqli->query($qu) or die($this->mysqli->error . __LINE__);
 
+            $_query_proc = "CALL p_update_stock($article,$magasin)";
+            $this->mysqli->query($_query_proc) or die($this->mysqli->error . __LINE__);
+
+
             $this->mysqli->commit();
             $this->mysqli->autocommit(TRUE);
             return $r;
